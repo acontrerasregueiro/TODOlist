@@ -35,9 +35,7 @@ const App = () => {
 			<ul>
 				{lista.map(function (valor, indice) {
 					//AÑADO EL ELEMENTO COMO UN LI Y SU INDICE
-					return (
-						<li key={indice}>{valor + " " + "indice" + indice}</li>
-					);
+					return <li key={indice}>{valor}</li>;
 				})}
 			</ul>
 		</div>
