@@ -10,6 +10,13 @@ const App = () => {
 		console.log(lista);
 	}, [lista]);
 
+	function borrar(i) {
+		let re = lista.filter((valor, index) => {
+			return index != i;
+		});
+		setLista(re);
+	}
+
 	return (
 		<div>
 			<h1 className="text-center mt-5"> TODO LIST</h1>
@@ -35,7 +42,17 @@ const App = () => {
 			<ul>
 				{lista.map(function (valor, indice) {
 					//AÑADO EL ELEMENTO COMO UN LI Y SU INDICE
-					return <li key={indice}>{valor}</li>;
+					return (
+						<li key={indice}>
+							{valor}
+							<button
+								onClick={() => {
+									borrar(indice);
+								}}>
+								x
+							</button>
+						</li>
+					);
 				})}
 			</ul>
 		</div>
