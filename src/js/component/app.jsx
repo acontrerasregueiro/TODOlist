@@ -1,16 +1,47 @@
 import React, { useState, useEffect } from "react";
-//include images into your bundle
-//create your first component
+
+function leerApi(setLista) {
+	fetch("https://assets.breatheco.de/apis/fake/todos/user/acontrerasregueiro")
+		.then((response) => response.json())
+		.then((result) => setLista(result))
+		.catch((error) => console.log("error", error));
+}
+
+function actualizardatosApi(lista) {
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+
+	var raw = JSON.stringify(lista);
+	var requestOptions = {
+		method: "PUT",
+		headers: myHeaders,
+		body: raw,
+		redirect: "follow",
+	};
+
+	fetch(
+		"https://assets.breatheco.de/apis/fake/todos/user/acontrerasregueiro",
+		requestOptions
+	)
+		.then((response) => response.json())
+		.then((result) => console.log(result))
+		.catch((error) => console.log("error", error));
+}
+
 const App = () => {
 	const [tarea, setTarea] = useState("");
 	const [lista, setLista] = useState([]);
-	// CUANDO HAYA UN CAMBIO EN LISTA, ME MUESTRA POR CONSOLA LISTA
 
 	useEffect(() => {
-		console.log(lista);
-	}, [lista]);
+		leerApi(setLista);
+	}, []); // se renderiza una vez , al iniciar la app por primera vez
+
+	useEffect(() => {
+		actualizardatosApi(lista);
+	}, [lista]); // cada vez que se modifica la variable lista se ejecutara anadiraApi()
 
 	function borrar(i) {
+		//filtramos el resultado y dejamos todos salvo el que sea igual al indice
 		let re = lista.filter((valor, index) => {
 			return index != i;
 		});
@@ -27,30 +58,25 @@ const App = () => {
 				}}></input>
 			<button
 				onClick={(e) => {
-					alert(tarea);
-				}}>
-				Añadir TAREA
-			</button>
-			<button
-				onClick={(e) => {
 					//agrega lista a las tareas que ya teniamos
-					setLista([...lista, tarea]);
-					console.log;
+					setLista([...lista, { label: tarea, done: false }]);
 				}}>
-				Añadir a lista
+				Añadir a API
 			</button>
 			<ul>
-				{lista.map(function (valor, indice) {
+				{lista?.map((objeto, indice) => {
 					//AÑADO EL ELEMENTO COMO UN LI Y SU INDICE
 					return (
 						<li key={indice}>
-							{valor}
+							{objeto.label}
 							<button
-								onClick={() => {
+								key={indice}
+								onClick={(e) => {
 									borrar(indice);
 								}}>
 								x
 							</button>
+							;
 						</li>
 					);
 				})}
